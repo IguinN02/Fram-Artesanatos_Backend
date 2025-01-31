@@ -109,4 +109,15 @@ produtoRouter.delete("/:id", (req, res) => {
   });
 });
 
+produtoRouter.get("/search/:query", (req, res) => {
+  const searchQuery = `%${req.params.query}%`;
+  
+  handleQuery(
+    res,
+    "SELECT * FROM produto WHERE nome ILIKE $1",
+    [searchQuery],
+    (results) => res.json(results.rows)
+  );
+});
+
 module.exports = produtoRouter;
