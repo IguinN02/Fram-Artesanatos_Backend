@@ -12,8 +12,8 @@ const handleQuery = (res, query, params, successCallback) => {
 };
 
 const validateProductFields = (req, res, next) => {
-  const { NomeProduto, ValorProduto, DescricaoProduto, ImgProduto } = req.body;
-  if (!NomeProduto || !ValorProduto || !DescricaoProduto || !ImgProduto) {
+  const { NomeProduto, ValorProduto, DescricaoProduto, ImgProduto, CategoriaProduto } = req.body;
+  if (!NomeProduto || !ValorProduto || !DescricaoProduto || !ImgProduto || !CategoriaProduto) {
     return res.status(400).json({ error: "Todos os campos são obrigatórios" });
   }
   next();
@@ -40,10 +40,9 @@ produtoRouter.get("/:id", (req, res) => {
 });
 
 produtoRouter.post("/", validateProductFields, (req, res) => {
-  const { NomeProduto, ValorProduto, DescricaoProduto, ImgProduto } = req.body;
-  const sql =
-    "INSERT INTO produto (nome, preco, descricao, imagens) VALUES ($1, $2, $3, $4) RETURNING idproduto";
-  const values = [NomeProduto, ValorProduto, DescricaoProduto, ImgProduto];
+  const { NomeProduto, ValorProduto, DescricaoProduto, ImgProduto, CategoriaProduto } = req.body;
+  const sql = "INSERT INTO produto (nome, preco, descricao, imagens, categoria) VALUES ($1, $2, $3, $4, $5) RETURNING idproduto";
+  const values = [NomeProduto, ValorProduto, DescricaoProduto, ImgProduto, CategoriaProduto];
 
   handleQuery(res, sql, values, (results) =>
     res.status(201).json({
@@ -55,7 +54,7 @@ produtoRouter.post("/", validateProductFields, (req, res) => {
 
 produtoRouter.put("/:id", (req, res) => {
   const id = req.params.id;
-  const { NomeProduto, ValorProduto, DescricaoProduto, ImgProduto } = req.body;
+  const { NomeProduto, ValorProduto, DescricaoProduto, ImgProduto, CategoriaProduto } = req.body;
 
   let updateFields = [];
   let values = [];
@@ -79,6 +78,12 @@ produtoRouter.put("/:id", (req, res) => {
   if (ImgProduto) {
     updateFields.push(`imagens = $${paramIndex}`);
     values.push(ImgProduto);
+    paramIndex++;
+  }
+
+  if (CategoriaProduto) {
+    updateFields.push(`categoria = $${paramIndex}`);
+    values.push(CategoriaProduto);
     paramIndex++;
   }
 
@@ -111,7 +116,7 @@ produtoRouter.delete("/:id", (req, res) => {
 
 produtoRouter.get("/search/:query", (req, res) => {
   const searchQuery = `%${req.params.query}%`;
-  
+
   handleQuery(
     res,
     "SELECT * FROM produto WHERE nome ILIKE $1",
