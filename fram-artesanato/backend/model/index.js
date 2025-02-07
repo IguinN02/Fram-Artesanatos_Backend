@@ -7,7 +7,7 @@ const app = express();
 const porta = process.env.PORT || 3000;
 
 app.use(cors({
-  origin: "https://fram-artesanatos-frontend.vercel.app", 
+  origin: "https://fram-artesanatos-backend.vercel.app", 
   methods: ["GET", "POST", "PUT", "DELETE"], 
   allowedHeaders: ["Content-Type", "Authorization"], 
   credentials: true 
