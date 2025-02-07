@@ -1,12 +1,18 @@
 const express = require("express");
 const cors = require("cors");
 const rotaProduto = require("./produto");
-const rotaUsuario = require("./usuario"); 
+const rotaUsuario = require("./usuario");
 
 const app = express();
 const porta = process.env.PORT || 3000;
 
-app.use(cors());
+const corsOptions = {
+  origin: "https://fram-artesanatos-frontend.vercel.app", 
+  methods: "GET,POST,PUT,DELETE", 
+  allowedHeaders: "Content-Type, Authorization", 
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 console.log("Configuração de rota produto: ", rotaProduto);
