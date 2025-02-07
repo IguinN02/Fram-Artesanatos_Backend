@@ -6,12 +6,7 @@ const rotaUsuario = require("./usuario");
 const app = express();
 const porta = process.env.PORT || 3000;
 
-app.use(cors({
-  origin: "https://fram-artesanatos-backend.onrender.com",
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
-}));
+app.use(cors());
 
 app.use(express.json());
 
