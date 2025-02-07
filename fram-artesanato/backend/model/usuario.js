@@ -16,6 +16,11 @@ const handleQuery = (res, query, params, successCallback) => {
     });
 };
 
+usuarioRouter.get("/", (req, res) => {
+  console.log("Consultando todos os usuarios...");
+  handleQuery(res, "SELECT * FROM usuarios", [], (results) => res.json(results.rows));
+});
+
 usuarioRouter.post("/cadastro", async (req, res) => {
   const { nome, email, telefone, password } = req.body;
 
