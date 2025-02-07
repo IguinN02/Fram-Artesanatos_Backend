@@ -6,13 +6,13 @@ const rotaUsuario = require("./usuario");
 const app = express();
 const porta = process.env.PORT || 3000;
 
-const corsOptions = {
+app.use(cors({
   origin: "https://fram-artesanatos-frontend.vercel.app", 
-  methods: "GET,POST,PUT,DELETE", 
-  allowedHeaders: "Content-Type, Authorization", 
-};
+  methods: ["GET", "POST", "PUT", "DELETE"], 
+  allowedHeaders: ["Content-Type", "Authorization"], 
+  credentials: true 
+}));
 
-app.use(cors(corsOptions));
 app.use(express.json());
 
 console.log("Configuração de rota produto: ", rotaProduto);
@@ -27,7 +27,7 @@ app.get("/", (req, res) => {
 });
 
 app.listen(porta, () => {
-  console.log(`Servidor funcionando em http://localhost:${porta}`);
+  console.log(`Servidor funcionando na porta ${porta}`);
 });
 
 module.exports = app;
