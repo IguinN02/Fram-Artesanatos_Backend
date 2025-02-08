@@ -4,7 +4,7 @@ const express = require("express");
 const app = express();
 const porta = process.env.PORT || 3000;
 
-const allowedOrigins = ["https://fram-artesanatos-frontend.vercel.app/Cadastro"];
+const allowedOrigins = ["https://fram-artesanatos-frontend.vercel.app"];
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", allowedOrigins[0]); 
