@@ -92,7 +92,7 @@ const verificarToken = (req, res, next) => {
   });
 };
 
-usuarioRouter.get("/perfil", verificarToken, (req, res) => {
+usuarioRouter.get("/Perfil", verificarToken, (req, res) => {
   db.query("SELECT id, nome, email, telefone FROM usuarios WHERE id = $1", [req.usuarioId])
     .then((results) => {
       if (results.rows.length === 0) {
