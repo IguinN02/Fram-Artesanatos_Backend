@@ -31,13 +31,20 @@ usuarioRouter.post("/cadastro", async (req, res) => {
   try {
     const senhaHash = await bcrypt.hash(password, 10);
     const sql =
-      "INSERT INTO usuarios (nome, email, telefone, password) VALUES ($1, $2, $3, $4) RETURNING id";
+      "INSERT INTO usuarios (nome, email, telefone, password) VALUES ($1, $2, $3, $4) RETURNING id, email";
     const values = [nome, email, telefone, senhaHash];
 
     handleQuery(res, sql, values, (results) => {
+      const usuario = results.rows[0];
+
+      const token = jwt.sign({ id: usuario.id, email: usuario.email }, SECRET_KEY, {
+        expiresIn: "1h",
+      });
+
       res.status(201).json({
         message: "Usuário cadastrado com sucesso",
-        id: results.rows[0].id,
+        id: usuario.id,
+        token,
       });
     });
   } catch (error) {
