@@ -5,11 +5,12 @@ const app = express();
 const porta = process.env.PORT || 3000;
 
 const corsOptions = {
-  origin: "https://fram-artesanatos-frontend.vercel.app",
+  origin: "*", 
   credentials: true,
   methods: "GET, POST, PUT, DELETE, OPTIONS",
-  allowedHeaders: "Content-Type, Authorization",
+  allowedHeaders: "*",
 };
+
 
 app.use(cors(corsOptions));
 
