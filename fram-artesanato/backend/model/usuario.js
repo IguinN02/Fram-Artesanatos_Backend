@@ -11,7 +11,6 @@ const handleQuery = (res, query, params, successCallback) => {
   db.query(query, params)
     .then((results) => successCallback(results))
     .catch((err) => {
-      console.log("Tentando cadastrar usuário:", nome, email, telefone);
       console.error("Erro na consulta:", err);
       res.status(500).json({ error: "Erro interno do servidor" });
     });
@@ -32,13 +31,20 @@ usuarioRouter.post("/cadastro", async (req, res) => {
   try {
     const senhaHash = await bcrypt.hash(password, 10);
     const sql =
-      "INSERT INTO usuarios (nome, email, telefone, password) VALUES ($1, $2, $3, $4) RETURNING id";
+      "INSERT INTO usuarios (nome, email, telefone, password) VALUES ($1, $2, $3, $4) RETURNING id, email";
     const values = [nome, email, telefone, senhaHash];
 
     handleQuery(res, sql, values, (results) => {
+      const usuario = results.rows[0];
+
+      const token = jwt.sign({ id: usuario.id, email: usuario.email }, SECRET_KEY, {
+        expiresIn: "1h",
+      });
+
       res.status(201).json({
         message: "Usuário cadastrado com sucesso",
-        id: results.rows[0].id,
+        id: usuario.id,
+        token,
       });
     });
   } catch (error) {
