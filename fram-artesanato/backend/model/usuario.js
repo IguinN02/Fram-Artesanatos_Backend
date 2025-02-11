@@ -22,7 +22,7 @@ usuarioRouter.get("/", (req, res) => {
   handleQuery(res, "SELECT * FROM usuarios", [], (results) => res.json(results.rows));
 });
 
-usuarioRouter.post("/cadastro", async (req, res) => {
+usuarioRouter.post("/Cadastro", async (req, res) => {
   const { nome, email, telefone, password } = req.body;
 
   if (!nome || !email || !telefone || !password) {
@@ -46,7 +46,7 @@ usuarioRouter.post("/cadastro", async (req, res) => {
   }
 });
 
-usuarioRouter.post("/login", (req, res) => {
+usuarioRouter.post("/Login", (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -93,7 +93,7 @@ const verificarToken = (req, res, next) => {
   });
 };
 
-usuarioRouter.get("/perfil", verificarToken, (req, res) => {
+usuarioRouter.get("/Perfil", verificarToken, (req, res) => {
   db.query("SELECT id, nome, email, telefone FROM usuarios WHERE id = $1", [req.usuarioId])
     .then((results) => {
       if (results.rows.length === 0) {
