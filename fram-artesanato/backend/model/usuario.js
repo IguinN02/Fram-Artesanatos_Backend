@@ -11,6 +11,7 @@ const handleQuery = (res, query, params, successCallback) => {
   db.query(query, params)
     .then((results) => successCallback(results))
     .catch((err) => {
+      console.log("Tentando cadastrar usuário:", nome, email, telefone);
       console.error("Erro na consulta:", err);
       res.status(500).json({ error: "Erro interno do servidor" });
     });
