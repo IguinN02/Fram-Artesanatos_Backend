@@ -23,6 +23,7 @@ usuarioRouter.get("/", (req, res) => {
 
 usuarioRouter.post("/cadastro", async (req, res) => {
   const { nome, email, telefone, password } = req.body;
+  console.log("Dados recebidos para cadastro:", req.body); // Log dos dados
 
   if (!nome || !email || !telefone || !password) {
     return res.status(400).json({ error: "Todos os campos são obrigatórios" });
@@ -30,17 +31,20 @@ usuarioRouter.post("/cadastro", async (req, res) => {
 
   try {
     const senhaHash = await bcrypt.hash(password, 10);
+    console.log("Senha hash gerada:", senhaHash); // Log da senha hash
     const sql =
       "INSERT INTO usuarios (nome, email, telefone, password) VALUES ($1, $2, $3, $4) RETURNING id";
     const values = [nome, email, telefone, senhaHash];
 
     handleQuery(res, sql, values, (results) => {
+      console.log("Usuário criado com sucesso:", results); // Log do sucesso
       res.status(201).json({
         message: "Usuário cadastrado com sucesso",
         id: results.rows[0].id,
       });
     });
   } catch (error) {
+    console.error("Erro ao criar usuário:", error); // Log de erro
     res.status(500).json({ error: "Erro ao criar usuário" });
   }
 });
